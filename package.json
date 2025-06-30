@@ -2,8 +2,8 @@
   "name": "vscode-extension-for-ccsc",
   "displayName": "VSCode Extension for CCSC",
   "description": "CCSC コンパイラ向けビルドタスクと IntelliSense を提供",
-  "publisher": "user",
-  "version": "0.0.1",
+  "publisher": "mkyt",
+  "version": "1.0.0",
   "license": "MIT",
   "engines": {
     "vscode": "^1.101.0"
@@ -11,6 +11,10 @@
   "categories": [
     "Other"
   ],
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/mkyt0230/CCSC-Helper-for-VSCode.git"
+},
   "activationEvents": [
     "onLanguage:c",
     "onTask:ccsc",
