@@ -1,0 +1,8 @@
+node_modules
+.vscode
+.git
+*.ts
+*.map
+test
+LICENSE
+README.md
