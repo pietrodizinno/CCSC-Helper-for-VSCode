@@ -1,0 +1,17 @@
+# Build output
+dist/
+out/
+
+# Node dependencies
+node_modules/
+
+# VSCode settings
+.vscode/
+
+# Package artifacts
+*.vsix
+
+# Logs and OS-specific files
+*.log
+.DS_Store
+Thumbs.db
