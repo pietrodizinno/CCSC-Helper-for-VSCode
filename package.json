@@ -1,0 +1,314 @@
+{
+  "name": "vscode-extension-for-ccsc",
+  "displayName": "VSCode Extension for CCSC",
+  "description": "CCSC コンパイラ向けビルドタスクと IntelliSense を提供",
+  "publisher": "user",
+  "version": "0.0.1",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.101.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:c",
+    "onTask:ccsc",
+    "onCommand:ccsc-helper.build",
+    "onCommand:ccsc-helper.flash",
+    "onCommand:ccsc-helper.buildAndFlash"
+  ],
+  "main": "./dist/extension.js",
+  "extensionDependencies": [
+    "ms-vscode.cpptools"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "ccsc-helper.build",
+        "title": "CCSC: Build"
+      },
+      {
+        "command": "ccsc-helper.flash",
+        "title": "CCSC: Flash"
+      },
+      {
+        "command": "ccsc-helper.buildAndFlash",
+        "title": "CCSC: Build and Flash"
+      }
+    ],
+    "taskDefinitions": [
+      {
+        "type": "ccsc",
+        "required": [
+          "task"
+        ],
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "The ccsc task to run"
+          }
+        }
+      }
+    ],
+    "problemMatchers": [
+      {
+        "name": "ccsc",
+        "owner": "ccsc-compiler",
+        "fileLocation": "absolute",
+        "pattern": {
+          "regexp": "^(.*?):(\\d+):(\\d+):\\s+(Error|Warning)#\\d+\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      }
+    ],
+    "snippets": [
+      {
+        "language": "c",
+        "path": "./snippets/c.json"
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.ccsc",
+        "path": "./syntaxes/ccsc.tmLanguage.json",
+        "injectTo": [
+          "source.c"
+        ]
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "CCSC Helper",
+      "properties": {
+        "ccscHelper.ccscInstallPath": {
+          "type": "string",
+          "default": "C:\\Program Files (x86)\\PICC",
+          "description": "CCSC のインストールパス"
+        },
+        "ccscHelper.compilerOptions": {
+          "type": "string",
+          "default": "+FH +Ex",
+          "description": "ccscompile.exe に渡すコンパイルオプション"
+        },
+        "ccscHelper.build.deleteUnnecessaryFiles": {
+          "type": "array",
+          "default": [
+            "pc$.err"
+          ],
+          "description": "ビルド終了後に削除する不要ファイルのパターン",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ccscHelper.flash.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Flash（書き込み）機能を有効にする"
+        },
+        "ccscHelper.flash.useJava": {
+          "type": "boolean",
+          "default": true,
+          "description": "JavaベースのIPECMD（ipecmd.jar）を使用する"
+        },
+        "ccscHelper.flash.javaPath": {
+          "type": "string",
+          "default": "",
+          "description": "Javaの実行パス（空の場合は自動検出、PATHにない場合は絶対パスを指定 例: \"C:\\Program Files\\Java\\jre1.8.0_XXX\\bin\\java.exe\"）"
+        },
+        "ccscHelper.flash.toolPath": {
+          "type": "string",
+          "default": "C:\\Program Files\\Microchip\\MPLABX\\v6.20\\mplab_platform\\mplab_ipe",
+          "description": "MPLAB IPEのパス（ipecmd.jarが存在するディレクトリ）"
+        },
+        "ccscHelper.flash.deviceId": {
+          "type": "string",
+          "default": "18F67J94",
+          "description": "書き込み対象のPICデバイスID (例: 18F67J94, 16F877A)"
+        },
+        "ccscHelper.flash.programmer": {
+          "type": "string",
+          "default": "PK5",
+          "description": "プログラマーの種類 (PK5, PK4, PK3, SNAP, ICD4 など)",
+          "enum": [
+            "PK5",
+            "PK4",
+            "PK3",
+            "SNAP",
+            "ICD4",
+            "ICD3",
+            "REALICE",
+            "SIMULATOR"
+          ]
+        },
+        "ccscHelper.flash.voltage": {
+          "type": "string",
+          "default": "3.3",
+          "description": "プログラミング電圧 (例: 3.3, 5.0)",
+          "enum": [
+            "3.3",
+            "5.0"
+          ]
+        },
+        "ccscHelper.flash.extraArgs": {
+          "type": "string",
+          "default": "-M",
+          "description": "書き込みツールに追加で渡す引数 (-M: 書き込み後ベリファイ)"
+        },
+        "ccscHelper.intellisense.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "IntelliSense機能を有効にする"
+        },
+        "ccscHelper.intellisense.standard": {
+          "type": "string",
+          "default": "c99",
+          "description": "IntelliSenseで使用するC言語標準",
+          "enum": [
+            "c89",
+            "c99",
+            "c11",
+            "c17"
+          ]
+        },
+        "ccscHelper.intellisense.mode": {
+          "type": "string",
+          "default": "windows-clang-x86",
+          "description": "IntelliSenseモード",
+          "enum": [
+            "windows-clang-x86",
+            "windows-clang-x64",
+            "windows-gcc-x86",
+            "windows-gcc-x64",
+            "windows-msvc-x86",
+            "windows-msvc-x64"
+          ]
+        },
+        "ccscHelper.intellisense.compilerArgs": {
+          "type": "array",
+          "default": [
+            "-Wno-unknown-pragmas",
+            "-Wno-invalid-pp-token"
+          ],
+          "description": "IntelliSenseコンパイラ引数（警告抑制など）",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ccscHelper.intellisense.standardDefines": {
+          "type": "array",
+          "default": [
+            "__PCM__",
+            "__PCH__",
+            "__PCD__",
+            "__CCSC__"
+          ],
+          "description": "IntelliSenseに追加する標準的な定義",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ccscHelper.intellisense.modeDefines": {
+          "type": "object",
+          "default": {
+            "Standard": [
+              "__16F877A__"
+            ],
+            "PCM": [
+              "__PCM__"
+            ],
+            "PCH": [
+              "__PCH__"
+            ],
+            "PCD": [
+              "__PCD__"
+            ]
+          },
+          "description": "各コンパイルモードで使用される定義"
+        },
+        "ccscHelper.intellisense.compilerArguments": {
+          "type": "array",
+          "default": [
+            "-D__CCSC__=1",
+            "-D__16F877A__=1"
+          ],
+          "description": "IntelliSenseに渡すコンパイラ引数",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ccscHelper.intellisense.customDefines": {
+          "type": "array",
+          "default": [],
+          "description": "IntelliSenseに追加する独自の定義 (例: \"MY_DEFINE=1\")",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ccscHelper.intellisense.customIncludePaths": {
+          "type": "array",
+          "default": [],
+          "description": "IntelliSenseに追加する独自のインクルードパス",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ccscHelper.liveLinting.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "ファイル保存時の自動コンパイル（Live Linting）を有効にする"
+        },
+        "ccscHelper.liveLinting.delay": {
+          "type": "number",
+          "default": 500,
+          "description": "ファイル保存後にLive Lintingを開始するまでの待機時間（ミリ秒）"
+        },
+        "ccscHelper.liveLinting.errorPattern": {
+          "type": "string",
+          "default": "^(.*?):(\\d+):(\\d+):\\s+(Error|Warning)#\\d+\\s+(.*)$",
+          "description": "Live Lintingで使用するエラー・警告解析の正規表現パターン"
+        },
+        "ccscHelper.errorAnalysis.errorPattern": {
+          "type": "string",
+          "default": "^(.+?):(\\d+):(\\d+):\\s*Error#\\d+\\s*(.+)$",
+          "description": "エラー解析で使用する正規表現パターン"
+        },
+        "ccscHelper.errorAnalysis.warningPattern": {
+          "type": "string",
+          "default": "^(.+?):(\\d+):(\\d+):\\s*Warning#\\d+\\s*(.+)$",
+          "description": "警告解析で使用する正規表現パターン"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.101.0",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.25.1",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "vscode-cpptools": "^7.0.4",
+    "webpack": "^5.99.7",
+    "webpack-cli": "^6.0.1"
+  }
+}

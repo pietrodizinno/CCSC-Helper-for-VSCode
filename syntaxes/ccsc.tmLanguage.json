@@ -1,0 +1,39 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"scopeName": "source.ccsc",
+	"injectionSelector": "source.c - (comment, string)",
+	"patterns": [
+		{
+			"include": "#ccsc-pragmas"
+		},
+		{
+			"include": "#ccsc-types"
+		}
+	],
+	"repository": {
+		"ccsc-pragmas": {
+			"patterns": [
+				{
+					"name": "keyword.control.preprocessor.c.ccsc",
+					"match": "(?i)^\\s*#\\s*(asm|endasm|bit|byte|case|device|export|fill_rom|fuses|id|import|include|int_default|int_global|int_ram|list|nolist|locate|opt|org|pin_select|priority|profile|rom|separate|task|type|use|word|zero_ram|int_ad|int_adof|int_buscol|int_button|int_ccp1|int_ccp2|int_comp|int_eeprom|int_ext|int_i2c|int_lcd|int_lvd|int_pmp|int_psp|int_rb|int_rc|int_rda|int_rda2|int_rtcc|int_spp|int_ssp|int_tbe|int_tbe2|int_timer0|int_timer1|int_timer2|int_timer3|int_usb)\\b"
+				}
+			]
+		},
+		"ccsc-types": {
+			"patterns": [
+				{
+					"name": "storage.type.c.ccsc",
+					"match": "\\b(?i)(int1|int8|int16|int32|int48|int64|char|float|float32|short|long|void|signed|unsigned|boolean|byte)\\b"
+				},
+				{
+					"name": "support.function.c.ccsc",
+					"match": "\\b(?i)(setup_adc_ports|set_adc_channel|read_adc|delay_us|delay_ms|output_high|output_low|output_bit|input|set_tris_a|set_tris_b|port_b_pullups|enable_interrupts|disable_interrupts|clear_interrupt|ext_int_edge|jump_to_isr)\\b"
+				},
+				{
+					"name": "constant.language.c.ccsc",
+					"match": "\\b(?i)(true|false|high|low|all_analog|no_analogs|sAN0|adc_clock_div_32|adc_clock_internal|global|pin_a0|pin_b1|int_rda|int_timer1|int_ext)\\b"
+				}
+			]
+		}
+	}
+}

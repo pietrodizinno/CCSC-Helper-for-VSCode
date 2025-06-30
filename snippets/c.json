@@ -1,0 +1,76 @@
+{
+    "CCSC Device": {
+        "prefix": "ccsc-device",
+        "body": [
+            "#include <${1:16F877A}.h>"
+        ],
+        "description": "Include CCSC device header"
+    },
+    "CCSC Fuses": {
+        "prefix": "ccsc-fuses",
+        "body": [
+            "#fuses ${1:HS,NOWDT,NOPROTECT,NOLVP}"
+        ],
+        "description": "Insert CCSC Fuses directive"
+    },
+    "CCSC Use Delay": {
+        "prefix": "ccsc-use-delay",
+        "body": [
+            "#use delay(clock=${1:20000000})"
+        ],
+        "description": "Insert CCSC use delay directive"
+    },
+    "CCSC Use RS232": {
+        "prefix": "ccsc-use-rs232",
+        "body": [
+            "#use rs232(baud=${1:9600}, xmit=PIN_${2:C6}, rcv=PIN_${3:C7})"
+        ],
+        "description": "Insert CCSC use RS232 directive"
+    },
+    "CCSC Use I2C": {
+        "prefix": "ccsc-use-i2c",
+        "body": [
+            "#use i2c(Master, SCL=PIN_${1:C3}, SDA=PIN_${2:C4})"
+        ],
+        "description": "Insert CCSC use I2C directive"
+    },
+    "CCSC Use SPI": {
+        "prefix": "ccsc-use-spi",
+        "body": [
+            "#use spi(MASTER, CLK=PIN_${1:C3}, DI=PIN_${2:C4}, DO=PIN_${3:C5})"
+        ],
+        "description": "Insert CCSC use SPI directive"
+    },
+    "CCSC Main Function": {
+        "prefix": "ccsc-main",
+        "body": [
+            "void main()",
+            "{",
+            "\t$0",
+            "\twhile(TRUE)",
+            "\t{",
+            "\t\t",
+            "\t}",
+            "}"
+        ],
+        "description": "Insert CCSC main function structure"
+    },
+    "CCSC Complete Template": {
+        "prefix": "ccsc-template",
+        "body": [
+            "#include <${1:16F877A}.h>",
+            "#fuses ${2:HS,NOWDT,NOPROTECT,NOLVP}",
+            "#use delay(clock=${3:20000000})",
+            "",
+            "void main()",
+            "{",
+            "\t$0",
+            "\twhile(TRUE)",
+            "\t{",
+            "\t\t",
+            "\t}",
+            "}"
+        ],
+        "description": "Complete CCSC project template"
+    }
+}
