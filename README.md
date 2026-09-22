@@ -1,119 +1,155 @@
-# CCSC Helper for VS Code
+CCSC Helper for VS Code
+[!important]
+JP only
 
-> [!important]
-> JP only
-> 
-> このコードは不完全なので不具合を見つけたらご連絡ください。
+This code is incomplete, so please contact us if you find any issues.
 
-CCSC コンパイラ向けのビルドタスクと IntelliSense を提供する VS Code 拡張機能です。
-拡張機能IDは `user.vscode-extension-for-ccsc` です。
+A VS Code extension that provides build tasks and IntelliSense for the CCSC compiler.
+The extension ID is user.vscode-extension-for-ccsc.
 
-## 主な機能
+Main Features
+This extension currently provides the following features:
 
-この拡張機能は、現在以下の機能を提供します。
+Automatic Recognition of CCSC Projects
 
-1. **CCSCプロジェクトの自動認識**
-   - ワークスペース内に `.ccspjt` ファイルが存在する場合、自動的にCCSCプロジェクトとして認識し、必要な設定を有効化します。
+If a .ccspjt file exists in the workspace, it is automatically recognized as a CCSC project, and necessary settings are enabled.
 
-2. **IntelliSenseの強化**
-   - **型定義の自動追加**: CCSCコンパイラ特有の型（`int8`, `boolean`, `BYTE` など）をIntelliSenseに自動で定義します。これにより、標準のC言語にはない型に起因する多くの誤ったエラー表示を抑制します。
-   - **インクルードパスの自動設定**: CCSCの `Devices` および `Drivers` フォルダへのインクルードパスを自動的に設定し、デバイスヘッダファイル（例: `18F67J94.h`）や標準ドライバライブラリが正しく認識されるようにします。
-   - **コンパイラ種別の判定**: プロジェクトファイル (`.ccspjt`) を解析し、使用されているコンパイラ（`PCH` または `PCM`）を特定。`__PCH__=1` のような定義を自動で追加し、コンパイラに応じたIntelliSenseを提供します。
+Enhanced IntelliSense
 
-3. **ビルドタスクの提供**
-   - `.ccspjt` ファイルの情報をもとに、`ccscompile.exe` を実行するビルドタスクを自動で生成します。
-   - VS Codeのコマンドパレットから `Tasks: Run Build Task` (`Ctrl+Shift+B`) を実行するだけで、簡単にプロジェクトのコンパイルが可能です。
-   - メモリ使用量の表示とビルド後の不要ファイル自動削除機能を含みます。
+Automatic Addition of Type Definitions: Automatically defines CCSC-specific types (int8, boolean, BYTE, etc.) in IntelliSense. This suppresses many incorrect error displays caused by types not found in standard C.
 
-4. **Flash（書き込み）機能** ※MPLAB X IDE + プログラマーが必要
-   - MPLAB IPECMD（JavaベースのipecCmd.jar）を使用したHEXファイルの書き込み機能を提供します。
-   - PICkit 5、PICkit 4、MPLAB Snap等の各種プログラマーに対応しています。
-   - ステータスバーのボタンから直接Flash実行、またはBuild & Flash（ビルド後自動書き込み）が可能です。
+Automatic Include Path Configuration: Automatically configures include paths for CCSC Devices and Drivers folders, ensuring that device header files (e.g., 18F67J94.h) and standard driver libraries are recognized correctly.
 
-5. **シンタックスハイライト**
-   - `#use` や `#fuses` など、CCSC固有のディレクティブがカラー表示されます。
+Compiler Type Determination: Analyzes the project file (.ccspjt) to identify the compiler used (PCH or PCM). Automatically adds definitions like __PCH__=1 to provide compiler-appropriate IntelliSense.
 
-## 必須要件
+Provision of Build Tasks
 
-- **Visual Studio Code**
-- **[C/C++ 拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)** (Microsoft提供)
-- **CCSC (PIC C Compiler)**
-  - CCS C Compiler for PIC Microcontrollers
-  - **注意:** CCSC のインストールパスは設定 `ccscHelper.ccscInstallPath` で変更できます。（既定値は `C:\Program Files (x86)\PICC`）
-- **MPLAB X IPE** (Flash機能を使用する場合)
-  - MPLAB IPE (Integrated Programming Environment) が含まれている必要があります
-  - **対応バージョン:** MPLAB X IDE v5.0以降推奨
-  - **インストールパス例:** `C:\Program Files\Microchip\MPLABX\v6.20\`
-- **Java Runtime Environment (JRE) 8以降** (Flash機能を使用する場合)
-  - **Flash機能を使用する場合に必要:** MPLAB IPECMDはJavaベースのアプリケーション（ipecmd.jar）のため、Javaのインストールが必要です。
-  - **注意:** `java`コマンドがPATH環境変数に含まれていない場合は、設定 `ccscHelper.flash.javaPath` でJavaの実行パスを指定してください。
+Automatically generates a build task that runs ccscompile.exe based on information from the .ccspjt file.
 
-### 追加要件（推奨）
+Simply run Tasks: Run Build Task (Ctrl+Shift+B) from the VS Code command palette to easily compile the project.
 
-- **PICプログラマー** (Flash機能を使用する場合)
-  - PICkit 5, PICkit 4, PICkit 3, MPLAB Snap, ICD4, ICD3, Real ICE等
-  - 対象PICデバイスに対応したプログラマーが必要
+Includes memory usage display and an automatic deletion feature for unnecessary files after building.
 
-## 使い方
+Flash (Programming) Function ※Requires MPLAB X IDE + Programmer
 
-1. **プロジェクトを開く**: `.ccspjt` ファイルを含むフォルダをVS Codeで開きます。
-2. **自動設定**: 拡張機能がプロジェクトを自動で認識し、IntelliSenseの設定を行います。
-3. **ビルド**: `Ctrl+Shift+B` を押下し、表示されたメニューから `Build CCSC Project` を選択すると、プロジェクトがコンパイルされます。
-4. **タスクボタン**: ステータスバーに表示される **Build**, **Flash**, **Build&Flash** ボタンから各タスクを直接実行できます。
-5. **設定の確認**: この拡張機能が C/C++ の構成プロバイダーを自動的に `CCSC Helper` に設定します。必要に応じて C/C++ の設定メニューから別のプロバイダーを選択できます。
+Provides HEX file programming functionality using MPLAB IPECMD (Java-based ipecmd.jar).
 
-## 設定
+Supports various programmers such as PICkit 5, PICkit 4, and MPLAB Snap.
 
-以下の設定を `settings.json` または VS Code の設定画面で変更できます：
+Allows direct Flash execution from status bar buttons, or Build & Flash (automatic programming after building).
 
-### 基本設定
+Syntax Highlighting
 
-- `ccscHelper.ccscInstallPath`: CCSC のインストールパス（既定値: `C:\Program Files (x86)\PICC`）
-- `ccscHelper.compilerOptions`: `ccscompile.exe` に渡すコンパイルオプション（既定値: `+FH +Ex`）
+Color-codes CCSC-specific directives such as #use and #fuses.
 
-### ビルド設定
+Requirements
+Visual Studio Code
 
-- `ccscHelper.build.deleteUnnecessaryFiles`: ビルド終了後に削除する不要ファイルのパターン（既定値: `["pc$.err"]`）
+C/C++ Extension (provided by Microsoft)
 
-### Flash（書き込み）設定
+CCSC (PIC C Compiler)
 
-- `ccscHelper.flash.enabled`: Flash機能を有効にする（既定値: `true`）
-- `ccscHelper.flash.useJava`: JavaベースのIPECMD（ipecmd.jar）を使用する（既定値: `true`）
-- `ccscHelper.flash.javaPath`: Javaの実行パス（既定値: `java`）
-- `ccscHelper.flash.toolPath`: MPLAB IPEのパス（既定値: ipecmd.jarがあるディレクトリ）
-- `ccscHelper.flash.deviceId`: PICデバイスID（既定値: `18F67J94`）
-- `ccscHelper.flash.programmer`: プログラマーの種類（既定値: `PK5`）
-  - 選択肢: `PK5`, `PK4`, `PK3`, `SNAP`, `ICD4`, `ICD3`, `REALICE`, `SIMULATOR`
-- `ccscHelper.flash.voltage`: プログラミング電圧（既定値: `3.3`）
-  - 選択肢: `3.3`, `5.0`
-- `ccscHelper.flash.extraArgs`: 追加引数（既定値: `-M`）
+CCS C Compiler for PIC Microcontrollers
 
-### IntelliSense設定
+Note: The CCSC installation path can be changed via the ccscHelper.ccscInstallPath setting (Default: C:\Program Files (x86)\PICC).
 
-- `ccscHelper.intellisense.enabled`: IntelliSense機能を有効にする（既定値: `true`）
-- `ccscHelper.intellisense.standard`: C言語標準（既定値: `c99`）
-- `ccscHelper.intellisense.mode`: IntelliSenseモード（既定値: `windows-clang-x86`）
-- `ccscHelper.intellisense.compilerArgs`: コンパイラ引数（警告抑制など）
-- `ccscHelper.intellisense.standardDefines`: 標準的な定義
-- `ccscHelper.intellisense.modeDefines`: コンパイルモード別定義
-- `ccscHelper.intellisense.compilerArguments`: IntelliSenseコンパイラ引数
-- `ccscHelper.intellisense.customDefines`: 独自定義
-- `ccscHelper.intellisense.customIncludePaths`: 独自インクルードパス
+MPLAB X IPE (When using the Flash feature)
 
-### Live Linting設定
+Must include MPLAB IPE (Integrated Programming Environment).
 
-- `ccscHelper.liveLinting.enabled`: Live Linting機能を有効にする（既定値: `false`）
-- `ccscHelper.liveLinting.delay`: ファイル保存後の待機時間（既定値: `500`ms）
-- `ccscHelper.liveLinting.errorPattern`: 正規表現パターン
+Recommended Version: MPLAB X IDE v5.0 or later.
 
-### エラー解析設定
+Example Installation Path: C:\Program Files\Microchip\MPLABX\v6.20\
 
-- `ccscHelper.errorAnalysis.errorPattern`: エラー解析用正規表現
-- `ccscHelper.errorAnalysis.warningPattern`: 警告解析用正規表現
+Java Runtime Environment (JRE) 8 or later (When using the Flash feature)
 
-### MPLAB環境での設定例
+Required for the Flash feature: Since MPLAB IPECMD is a Java-based application (ipecmd.jar), Java installation is required.
 
-```json
+Note: If the java command is not included in your PATH environment variable, specify the Java executable path in the ccscHelper.flash.javaPath setting.
+
+Additional Requirements (Recommended)
+PIC Programmer (When using the Flash feature)
+
+PICkit 5, PICkit 4, PICkit 3, MPLAB Snap, ICD4, ICD3, Real ICE, etc.
+
+A programmer compatible with the target PIC device is required.
+
+Usage
+Open a Project: Open the folder containing the .ccspjt file in VS Code.
+
+Automatic Setup: The extension automatically recognizes the project and configures IntelliSense.
+
+Build: Press Ctrl+Shift+B and select Build CCSC Project from the displayed menu to compile the project.
+
+Task Buttons: Execute tasks directly from the Build, Flash, and Build&Flash buttons displayed in the status bar.
+
+Check Settings: This extension automatically sets the C/C++ configuration provider to CCSC Helper. You can select another provider from the C/C++ settings menu if needed.
+
+Settings
+You can modify the following settings in settings.json or through the VS Code settings screen:
+
+Basic Settings
+ccscHelper.ccscInstallPath: CCSC installation path (Default: C:\Program Files (x86)\PICC)
+
+ccscHelper.compilerOptions: Compilation options passed to ccscompile.exe (Default: +FH +Ex)
+
+Build Settings
+ccscHelper.build.deleteUnnecessaryFiles: Patterns of unnecessary files to delete after build completion (Default: ["pc$.err"])
+
+Flash (Programming) Settings
+ccscHelper.flash.enabled: Enable the Flash feature (Default: true)
+
+ccscHelper.flash.useJava: Use Java-based IPECMD (ipecmd.jar) (Default: true)
+
+ccscHelper.flash.javaPath: Java executable path (Default: java)
+
+ccscHelper.flash.toolPath: MPLAB IPE path (Default: Directory containing ipecmd.jar)
+
+ccscHelper.flash.deviceId: PIC device ID (Default: 18F67J94)
+
+ccscHelper.flash.programmer: Programmer type (Default: PK5)
+
+Choices: PK5, PK4, PK3, SNAP, ICD4, ICD3, REALICE, SIMULATOR
+
+ccscHelper.flash.voltage: Programming voltage (Default: 3.3)
+
+Choices: 3.3, 5.0
+
+ccscHelper.flash.extraArgs: Additional arguments (Default: -M)
+
+IntelliSense Settings
+ccscHelper.intellisense.enabled: Enable IntelliSense features (Default: true)
+
+ccscHelper.intellisense.standard: C language standard (Default: c99)
+
+ccscHelper.intellisense.mode: IntelliSense mode (Default: windows-clang-x86)
+
+ccscHelper.intellisense.compilerArgs: Compiler arguments (warning suppression, etc.)
+
+ccscHelper.intellisense.standardDefines: Standard definitions
+
+ccscHelper.intellisense.modeDefines: Compile-mode specific definitions
+
+ccscHelper.intellisense.compilerArguments: IntelliSense compiler arguments
+
+ccscHelper.intellisense.customDefines: Custom definitions
+
+ccscHelper.intellisense.customIncludePaths: Custom include paths
+
+Live Linting Settings
+ccscHelper.liveLinting.enabled: Enable Live Linting feature (Default: false)
+
+ccscHelper.liveLinting.delay: Wait time after file save (Default: 500 ms)
+
+ccscHelper.liveLinting.errorPattern: Regular expression pattern
+
+Error Analysis Settings
+ccscHelper.errorAnalysis.errorPattern: Regular expression for error analysis
+
+ccscHelper.errorAnalysis.warningPattern: Regular expression for warning analysis
+
+Example Configuration in MPLAB Environment
+JSON
 {
   "ccscHelper.flash.enabled": true,
   "ccscHelper.flash.useJava": true,
@@ -124,87 +160,82 @@ CCSC コンパイラ向けのビルドタスクと IntelliSense を提供する 
   "ccscHelper.flash.voltage": "3.3",
   "ccscHelper.flash.extraArgs": "-M"
 }
-```
-
-#### 生成されるコマンド例
-
-```bash
-# Flash のみの場合
+Generated Command Examples
+Bash
+# Flash only
 cd "C:\Program Files\Microchip\MPLABX\v6.20\mplab_platform\mplab_ipe"
 java -jar ipecmd.jar -P18F67J94 -TPPK5 -W3.3 -F"C:\Code\main.hex" -M
 
-# Build & Flash の場合（ビルド後にFlash）
+# Build & Flash (Flash after building)
 cd "C:\Code\MyProject"
 "C:\Program Files (x86)\PICC\ccscompile.exe" +FH +Ex main.c
 cd "C:\Program Files\Microchip\MPLABX\v6.20\mplab_platform\mplab_ipe"
 java -jar ipecmd.jar -P18F67J94 -TPPK5 -W3.3 -F"C:\Code\MyProject\main.hex" -M
-```
+Troubleshooting
+Java Environment Issues
+If an error occurs indicating that Java is not found during the Flash operation:
 
-## トラブルシューティング
+Check if Java (JRE 8 or later) is installed
 
-### Java環境の問題
+Run java -version in the command prompt.
 
-Flash機能でJavaが見つからないエラーが発生した場合：
+If version information appears, Java is installed.
 
-1. **Java（JRE 8以降）がインストールされているか確認**
-   - コマンドプロンプトで `java -version` を実行
-   - バージョン情報が表示されればJavaはインストール済み
+If Java is not recognized in VS Code
 
-2. **VSCodeでJavaが認識されない場合**
-   - VSCode設定から `ccscHelper.flash.javaPath` を開く
-   - Javaの絶対パスを指定：
+Open ccscHelper.flash.javaPath in VS Code settings.
 
-     ```text
-     C:\Program Files\Java\jre1.8.0_XXX\bin\java.exe
-     ```
+Specify the absolute path to Java:
 
-   - または、Java実行可能ファイルの完全パスを指定：
+Plaintext
+C:\Program Files\Java\jre1.8.0_XXX\bin\java.exe
+Or specify the full path to the Java executable:
 
-     ```text
-     C:\Program Files\Eclipse Adoptium\jdk-11.0.XX-hotspot\bin\java.exe
-     ```
+Plaintext
+C:\Program Files\Eclipse Adoptium\jdk-11.0.XX-hotspot\bin\java.exe
+Common Java Installation Paths
 
-3. **一般的なJavaインストールパス**
+Plaintext
+C:\Program Files\Java\jre1.8.0_XXX\bin\java.exe
+C:\Program Files\Java\jdk-XX.X.X\bin\java.exe
+C:\Program Files\Eclipse Adoptium\jdk-XX.X.X-hotspot\bin\java.exe
+C:\Program Files\Microsoft\jdk-XX.X.X\bin\java.exe
+Adding Java to the PATH Environment Variable
 
-   ```text
-   C:\Program Files\Java\jre1.8.0_XXX\bin\java.exe
-   C:\Program Files\Java\jdk-XX.X.X\bin\java.exe
-   C:\Program Files\Eclipse Adoptium\jdk-XX.X.X-hotspot\bin\java.exe
-   C:\Program Files\Microsoft\jdk-XX.X.X\bin\java.exe
-   ```
+Open system environment variable settings.
 
-4. **環境変数PATHにJavaを追加する場合**
-   - システムの環境変数設定を開く
-   - PATH変数に `C:\Program Files\Java\jre1.8.0_XXX\bin` を追加
-   - VSCodeを再起動
+Add C:\Program Files\Java\jre1.8.0_XXX\bin to the PATH variable.
 
-### MPLAB X IDEのパス設定
+Restart VS Code.
 
-MPLAB X IDEのバージョンが異なる場合は、`ccscHelper.flash.toolPath` 設定を適切なパスに変更してください：
+MPLAB X IDE Path Configuration
+If you are using a different version of MPLAB X IDE, change the ccscHelper.flash.toolPath setting to the appropriate path:
 
-```text
+Plaintext
 C:\Program Files\Microchip\MPLABX\v6.XX\mplab_platform\mplab_ipe
-```
+If MPLAB X IDE Cannot Be Found
+Verify MPLAB X IDE is installed
 
-### MPLAB X IDEが見つからない場合
+Download and install it from the Microchip Official Website.
 
-1. **MPLAB X IDEがインストールされているか確認**
-   - [Microchip公式サイト](https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide)からダウンロード・インストール
-   - MPLAB IPE (Integrated Programming Environment) も含まれていることを確認
+Ensure that MPLAB IPE (Integrated Programming Environment) is also included.
 
-2. **インストールパスの確認**
-   - 標準インストールパス: `C:\Program Files\Microchip\MPLABX\`
-   - ipecmd.jarの場所: `C:\Program Files\Microchip\MPLABX\v6.XX\mplab_platform\mplab_ipe\ipecmd.jar`
+Check the Installation Path
 
-3. **プログラマーの接続確認**
-   - PICkit等のプログラマーがPCに正しく接続されているか
-   - デバイスドライバーが正しくインストールされているか
+Standard installation path: C:\Program Files\Microchip\MPLABX\
 
-## 注意事項
+Location of ipecmd.jar: C:\Program Files\Microchip\MPLABX\v6.XX\mplab_platform\mplab_ipe\ipecmd.jar
 
-- 拡張機能の設定 `ccsc-helper.ccscInstallPath` で CCSC のインストールパスを変更できます。
-- IntelliSenseは多くのCCSC固有の構文をサポートしますが、一部の特殊なディレクティブやインラインアセンブリなど、解釈できない場合があります。
+Check Programmer Connection
 
-## リリースノート
+Ensure that the programmer (such as PICkit) is properly connected to the PC.
 
-全ての変更履歴は CHANGELOG.md を参照してください。
+Verify that the device drivers are installed correctly.
+
+Notes
+You can change the CCSC installation path via the extension setting ccscHelper.ccscInstallPath.
+
+While IntelliSense supports many CCSC-specific syntaxes, some special directives or inline assembly may not be interpreted correctly.
+
+Release Notes
+Refer to CHANGELOG.md for a complete history of changes.
